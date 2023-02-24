@@ -1,7 +1,7 @@
 ﻿#include  <SFML\Graphics.hpp>
 #include <iostream>
-#include "Particle.cpp"
-#include "Strength.cpp"
+#include "Particle.h"
+#include "Strength.h"
 
 #define SCREEN_HIGHT 960
 #define SCREEN_WIDTH 1200
@@ -13,8 +13,8 @@ int main()
     
     //CRICLE declaration
     Grav_Strength grav_strength;
-    Particle mass1(150, 400, 60, 0, 0, 50, 0, 0);//posx, posy, radius, velx, vely, accx, accy
-    Particle mass2(600, 500, 60, 0.6, 2, 60, 89, -50);//posx, posy, radius, velx, vely, accx, accy
+    Particle mass1(150, 400, 60, 40, 40, 80, 1, 1);//posx, posy, radius, velx, vely, accx, accy
+    Particle mass2(600, 500, 60, 0, 0, 600, 0, 0);//posx, posy, radius, velx, vely, accx, accy
     sf::Event event;
     
     sf::Clock clock;
@@ -38,13 +38,11 @@ int main()
         
         grav_strength.distance(mass1, mass2);
         grav_strength.force(mass1, mass2);
-        grav_strength.force_mass1_x(mass1);
         float dt = clock.restart().asSeconds();
-
-        //std::cout << grav_strength.get_force_mass1_x()<< std::endl;
+        //std::cout << grav_strength.get_force_mass1_x() << " " << grav_strength.get_force_mass1_y() << std::endl;
         //render
         window.clear();//clear old frames
-
+        
         //draw 
         mass1.render(window);
         mass2.render(window);
@@ -57,8 +55,8 @@ int main()
         mass2.velocity(dt);
         mass1.acceleration(dt);
         mass2.acceleration(dt);
-        //mass1.force(grav_strength);
-        //mass2.force(grav_strength);
+        mass1.force(grav_strength.get_force_mass1_x(), grav_strength.get_force_mass1_y());
+        mass2.force(grav_strength.get_force_mass2_x(), grav_strength.get_force_mass2_y());
         mass1.collision();
         mass2.collision();
 
